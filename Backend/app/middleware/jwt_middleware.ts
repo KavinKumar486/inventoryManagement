@@ -15,14 +15,12 @@ export default class AuthJwt {
     }
     try {
       if (!process.env.JWT_SECRET) {
-        return response.unauthorized({ error: 'JWT secret not configured' })
+        return response.unauthorized({ error: 'JWT secret not provided' })
       }
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
-      
       request['user'] = decoded
     } catch (error) {
-      
-      return response.unauthorized({ error: 'Invalid or expired token' })
+      return response.unauthorized({ error: 'Invalid token' })
     }
 
     return next()

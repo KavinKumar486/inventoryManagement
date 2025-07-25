@@ -17,7 +17,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router' 
 const uname= ref('')
 const pass = ref('')
-const credentials = ref({name:'',expertise:''})
+const credentials = ref({name:'',pass:''})
 
 const router = useRouter() 
 async function handleLogin(){

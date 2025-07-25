@@ -16,29 +16,24 @@ export const useWarehouseStore = defineStore('warehouse', {
   getters: {
     filteredItems(state) {
       let result = Array.isArray(state.warehouses) ? [...state.warehouses] : []
-
       if (state.searchText.trim()) {
         const text = state.searchText.trim().toLowerCase()
         result = result.filter((item) =>
           Object.values(item).some((val) => String(val).toLowerCase().includes(text)),
         )
       }
-
       if (state.sortKey) {
         result.sort((a, b) => {
           const valA = a[state.sortKey]
           const valB = b[state.sortKey]
-
           if (typeof valA === 'number' && typeof valB === 'number') {
             return state.sortAsc ? valA - valB : valB - valA
           }
-
           return state.sortAsc
             ? String(valA).localeCompare(String(valB))
             : String(valB).localeCompare(String(valA))
         })
       }
-
       return result
     },
   },
