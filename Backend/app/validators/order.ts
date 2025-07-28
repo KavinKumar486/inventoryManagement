@@ -5,6 +5,12 @@ export const orderAddValidator = vine.compile(vine.object({
     orderDate: vine.string().trim().minLength(10).maxLength(10),
     deliveryDate: vine.string().trim().minLength(10).maxLength(10),
     customerLocation: vine.string().maxLength(255).minLength(3),
+    items: vine.array(
+    vine.object({
+      productId: vine.number(),
+      quantity: vine.number().min(1),
+    })
+  ).minLength(1),
 }))
 export const orderGetValidator = vine.compile(vine.object({
     id: vine.number().optional(),

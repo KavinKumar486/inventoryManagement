@@ -43,6 +43,7 @@ export default class LoginController {
         id: customer.id,
         name: customer.name,
         email: customer.email,
+        location: customer.location,
       },
     })
   }

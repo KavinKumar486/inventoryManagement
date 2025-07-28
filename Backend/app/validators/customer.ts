@@ -2,6 +2,7 @@ import vine from '@vinejs/vine'
 export const customerAddValidator= vine.compile(vine.object({
     name: vine.string().trim().minLength(3).maxLength(50),
     email:vine.string().trim().email(),
+    location: vine.string().trim().minLength(2).maxLength(100),
     password:vine.string().trim().minLength(8).maxLength(32)
     }))
 export const customerGetValidator = vine.compile(vine.object({

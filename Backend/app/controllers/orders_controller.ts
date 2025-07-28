@@ -1,19 +1,31 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { orderAddValidator, orderGetValidator, orderIdValidator, orderPatchValidator } from '#validators/order';
 import  OrdersRepository  from '../repository/orderItemRepository.js';
-
+import Customer from '../models/customer.js'
 export default class OrdersController {
     order = new OrdersRepository();
-    async add({request,response}: HttpContext) {
-        try
-        {
-        const data = await orderAddValidator.validate(request.body());
-        const result = await this.order.add(data);
-        return response.send({status:"Success", data: result});
-        } catch (error) {
-            throw new Error(error.message);
-        }
+      async add({ request, response }: HttpContext) {
+    try {
+      const data = await orderAddValidator.validate(request.body())
+      const { customerId, items } = data
+
+      
+      const customer = await Customer.find(customerId)
+      if (!customer) {
+        return response.status(400).send({ status: 'Error', message: `Customer with ID ${customerId} not found` })
+      }
+
+      
+      if (!items || !Array.isArray(items) || items.length === 0) {
+        return response.status(400).send({ status: 'Error', message: 'Order must include at least one item' })
+      }
+
+      const result = await this.order.add(data)
+      return response.send({ status: 'Success', data: result })
+    } catch (error) {
+      return response.status(400).send({ status: 'Error', message: error.message })
     }
+  }
     async get({ request, response }: HttpContext) {
       try {
         const { id, customerId } = await orderGetValidator.validate(request.qs())

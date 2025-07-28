@@ -4,11 +4,15 @@
 <h1 id="heading">Register</h1>
 <form @submit.prevent="handleRegister"> 
 <label for="username">Username:</label>
-<input v-model="uname" type="text" name="username" >    
+<input v-model="uname" type="text" name="username" >
+<label for="location">Location:</label>
+<input v-model="location" type="text" name="location">    
 <label for ='email'>Email:</label>
 <input v-model="email" type="email" name="email">
+
 <label for="password">Password:</label>
 <input v-model="password" type="password" name="password">  
+
 <button type="submit">Register</button>
 <p>Already have an account? <router-link to="/login"><button>Login</button></router-link></p>
 </form>
@@ -22,13 +26,16 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 const uname = ref('')
 const email = ref('')
 const password = ref('')
-const credentials = ref({name:'', email:'', password:''})   
+const location = ref('')
+const credentials = ref({name:'', email:'', password:'',location:''})   
 const router = useRouter()
 async function handleRegister() {
     try {
         credentials.value.name = uname.value;
         credentials.value.email = email.value;
         credentials.value.password = password.value;
+        credentials.value.location = location.value;
+
         const res = await axios.post(`${baseUrl}/customers/add`,credentials.value);
         if (res.data.status === 'Success') {
         console.log('Registration successful');
@@ -45,8 +52,10 @@ async function handleRegister() {
         credentials.value.name = '';
         credentials.value.email = '';
         credentials.value.password = '';
+        credentials.value.location = '';
         uname.value = '';
         email.value = '';
+        location.value='';
         password.value = '';
     }
 }

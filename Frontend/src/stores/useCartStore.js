@@ -1,3 +1,4 @@
+// src/stores/useCartStore.js
 import { defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cart', {
@@ -42,6 +43,16 @@ export const useCartStore = defineStore('cart', {
     clearCheckoutItems() {
       this.checkoutItems = []
       this.buyNowItems = []
+      this.cartItems = []
+    },
+
+    clearBuyNow() {
+      this.buyNowItems = []
+    },
+
+    
+    removeFromCart(itemId) {
+      this.cartItems = this.cartItems.filter((item) => item.id !== itemId)
     },
   },
 })

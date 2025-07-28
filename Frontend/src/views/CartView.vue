@@ -15,7 +15,7 @@ const checkout = () => {
 }
 function checkoutFromCartAndNavigate() {
   cartStore.checkoutFromCart()
-  router.push('/orders')
+  router.push('/checkout')
 }
 </script>
 

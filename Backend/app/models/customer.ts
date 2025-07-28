@@ -17,6 +17,9 @@ export default class Customer extends BaseModel {
   @column()
   declare password: string
 
+  @column()
+  declare location: string;
+
   @hasMany(() => Order)
   declare orders: relations.HasMany<typeof Order>
 
@@ -33,3 +36,4 @@ export default class Customer extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 }
+

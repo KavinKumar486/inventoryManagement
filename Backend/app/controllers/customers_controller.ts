@@ -6,11 +6,11 @@ export default class CustomersController {
     async add({request,response}:HttpContext){
         console.log('request body',request.body())
         try{
-            const { name,email,password } = await customerAddValidator.validate(request.body())
-            const payload =  await this.customerRepo.add({name:name,email:email,password:password});
+            const { name,email,password,location } = await customerAddValidator.validate(request.body())
+            const payload =  await this.customerRepo.add({name:name,email:email,password:password,location:location});
             response.status(201).send({status:'Success',message:'Added successfully',data:payload})
         }catch(err){
-            throw err
+            throw err   
         }
     }
     async get({request,response}:HttpContext){

@@ -1,35 +1,83 @@
 import Order from '../models/order.js'
 import OrderItem from '../models/order_item.js'
-
+// import Warehouse from '../models/warehouse.js'
 
 export default class OrdersRepository {
-  async add(data: object) {
-  const { customerId, orderDate, deliveryDate, customerLocation, items } = data as any
-  const trx = await Order.transaction()
+  async add(data: any) {
+    const { customerId, orderDate, deliveryDate, customerLocation, items } = data
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      throw new Error('Order must include at least one item')
+    }
 
-  try {
-    const order = await Order.create({
-      customerId,
-      orderDate: new Date(orderDate),
-      deliveryDate: new Date(deliveryDate),
-      customerLocation,
-    }, { client: trx })
-
-    const itemsPayload = items.map((item: any) => ({
-      orderId: order.id,
-      productId: item.productId,
-      quantity: item.quantity,
-    }))
-
-    await OrderItem.createMany(itemsPayload, { client: trx })
-
-    await trx.commit()
-    return order
-  } catch (error) {
-    await trx.rollback()
-    throw new Error(`Failed to create order: ${error.message}`)
+    const trx = await Order.transaction()
+    try {
+      const order = await Order.create(
+        { customerId, orderDate: new Date(orderDate), deliveryDate: new Date(deliveryDate), customerLocation },
+        { client: trx }
+      )
+      const itemsPayload = items.map((item: any) => ({
+        orderId: order.id,
+        productId: item.productId,
+        quantity: item.quantity,
+      }))
+      await OrderItem.createMany(itemsPayload, { client: trx })
+      await trx.commit()
+      return order
+    } catch (error) {
+      await trx.rollback()
+      throw new Error(`Failed to create order: ${error.message}`)
+    }
   }
-}
+//   async add(data: any) {
+//   const { customerId, orderDate, deliveryDate, customerLocation, items } = data;
+//   const trx = await Order.transaction();
+//   try {
+//     const order = await Order.create(
+//       { customerId, orderDate: new Date(orderDate), deliveryDate: new Date(deliveryDate), customerLocation },
+//       { client: trx }
+//     );
+//     const itemsPayload = items.map((item: any) => ({
+//       orderId: order.id,
+//       productId: item.productId,
+//       quantity: item.quantity,
+//     }));
+//     await OrderItem.createMany(itemsPayload, { client: trx });
+//     await trx.commit();
+//     return order;
+//   } catch (error) {
+//     await trx.rollback();
+//     throw new Error(`Failed to create order: ${error.message}`);
+//   }
+// }
+// async add(data: any) {
+//   const { customerId, orderDate, deliveryDate, customerLocation, items } = data;
+//   const trx = await Order.transaction();
+//   try {
+//     const order = await Order.create(
+//       { customerId, orderDate: new Date(orderDate), deliveryDate: new Date(deliveryDate), customerLocation },
+//       { client: trx }
+//     );
+//     const itemsPayload = items.map((item: any) => ({
+//       orderId: order.id,
+//       productId: item.productId,
+//       quantity: item.quantity,
+//     }));
+//     await OrderItem.createMany(itemsPayload, { client: trx });
+//     for (const item of items) {
+//       const warehouseItem = await Warehouse.findOrFail(item.productId, { client: trx });
+//       if (warehouseItem.productQuantity < item.quantity) {
+//         throw new Error(`Insufficient quantity for ${warehouseItem.productName}`);
+//       }
+//       warehouseItem.productQuantity -= item.quantity;
+//       await warehouseItem.save();
+//     }
+//     await trx.commit();
+//     return order;
+//   } catch (error) {
+//     await trx.rollback();
+//     throw new Error(`Failed to create order: ${error.message}`);
+//   }
+// }
 
 
 async get(id?: number, customerId?: number) {

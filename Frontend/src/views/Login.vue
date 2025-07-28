@@ -12,6 +12,7 @@
 
 <script setup>
 import "../assets/formStyle.css"
+import { useAuthStore } from "@/stores/useAuthStore"
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router' 
@@ -26,6 +27,9 @@ async function handleLogin(){
      credentials.value.pass = pass.value;
      const res = await axios.post('http://localhost:3333/login', credentials.value);
      if (res.data.message === 'Verified') {
+      const authStore = useAuthStore();
+      authStore.setToken(res.data.token);
+      authStore.setUser(res.data.user);
       router.push('/landingPage')
       localStorage.setItem('jwt_token', res.data.token)
      } else {
