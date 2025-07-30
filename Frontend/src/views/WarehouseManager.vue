@@ -31,7 +31,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <h2>Warehouse Products</h2>
+    <h2>Products</h2>
 
     <div v-if="store.loading">Loading warehouse items...</div>
     <div v-else-if="store.error" class="error">{{ store.error }}</div>

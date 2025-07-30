@@ -19,7 +19,6 @@ import { useRouter } from 'vue-router'
 const uname= ref('')
 const pass = ref('')
 const credentials = ref({name:'',pass:''})
-
 const router = useRouter() 
 async function handleLogin(){
    try {
@@ -52,5 +51,10 @@ async function handleLogin(){
 </script>
 
 <style>
-
+#heading{
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 </style>

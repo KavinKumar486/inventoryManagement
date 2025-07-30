@@ -1,6 +1,7 @@
 <template>
-  <router-link to="/cart"> Cart ({{ cartStore.totalItems }}) </router-link>
-
+  <router-link class="navButton" to="/cart"> Cart ({{ cartStore.totalItems }}) </router-link>
+  <router-link  class="navButton" to="/orders">Orders</router-link>
+  <button class="navButton" @click="goBack">Go Back</button>
   <table border="1">
     <thead>
       <tr>
@@ -80,4 +81,19 @@ function confirmAddToCart(item) {
   })
   item.showQuantityDropdown = false
 }
+function goBack(){
+  router.go(-1)
+}
 </script>
+<style scoped>
+.navButton{
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+}
+</style>

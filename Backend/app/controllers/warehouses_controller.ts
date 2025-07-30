@@ -26,6 +26,7 @@ export default class WarehousesController {
     async delete({request,response}:HttpContext){
         try{
             const {id} = await warehouseIdValidator.validate(request.params())
+            console.log('id',id)
             const payload = await this.warehouserepo.delete(id)
             return response.send({status: 'success', data: payload})
         }

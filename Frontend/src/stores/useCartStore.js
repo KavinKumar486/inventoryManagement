@@ -22,8 +22,12 @@ export const useCartStore = defineStore('cart', {
       const existing = this.cartItems.find((i) => i.id === item.id)
       if (existing) {
         existing.quantity += item.quantity
+        if(existing.quantity>existing.productQuantity){
+          existing.quantity = existing.productQuantity
+          alert(`Maximum quantity of the selected Product is ${existing.quantity}`)
+        }
       } else {
-        this.cartItems.push(item)
+        this.cartItems.push({...item,quantity:Math.min(item.quantity,item.productQuantity)})
       }
     },
 
@@ -50,7 +54,21 @@ export const useCartStore = defineStore('cart', {
       this.buyNowItems = []
     },
 
-    
+    reduceQuantity(itemId){
+      const item = this.cartItems.find((i)=> i.id ===itemId)
+      if(item){
+        item.quantity-=1
+        if(item.quantity<0){
+          this.removeFromCart(itemId)
+        }
+        
+      
+      else if(item.quantity <item.productQuantity){
+        item.quantity = item.productQuantity
+        alert( `Not available the maximum available quantity is ${item.productQuantity}`)
+      }
+    }
+    },
     removeFromCart(itemId) {
       this.cartItems = this.cartItems.filter((item) => item.id !== itemId)
     },

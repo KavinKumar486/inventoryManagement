@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="ordersView">
     <h1>Your Orders</h1>
 
     <div v-if="orders.length === 0">
@@ -8,10 +8,10 @@
 
     <div v-else>
       <div
-        v-for="order in orders"
-        :key="order.id"
+        v-for="(order,index) in orders"
+        :key="index"
       >
-        <h2>Order #{{ order.id }}</h2>
+        <h2>Order {{ index+1 }}</h2>
         <p><strong>Date:</strong> {{ order.orderDate }}</p>
         <p><strong>Delivery:</strong> {{ order.deliveryDate }}</p>
         <p><strong>Location:</strong> {{ order.customerLocation }}</p>
@@ -40,26 +40,27 @@
       </div>
     </div>
   </div>
+
+<Invoice />
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue'
 import api from '@/services/api'
 import { useAuthStore } from '@/stores/useAuthStore' 
+import Invoice from '../components/invoice.vue'
 const authStore = useAuthStore()
 const orders = ref([])
 onMounted(async () => {
   try {
-    const response = await api.get('/orders/get', {
-      params: { customerId: authStore.user.id }  
-    })
+    const response = await api.get('/orders/get', { params: { customerId: authStore.user.id }})
     orders.value = response.data.data
   } catch (error) {
     console.error('Failed to load orders:', error)
   }
 })
 </script>
-
 <style scoped>
 th, td {
   padding: 6px;

@@ -16,6 +16,8 @@ export default class OrderItem extends BaseModel {
   @column()
   declare quantity: number
 
+  @column()
+  declare priceAtPurchase: number
   @belongsTo(() => Order)
   declare order: BelongsTo<typeof Order>
 

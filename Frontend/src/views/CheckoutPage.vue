@@ -4,7 +4,7 @@
 
     <div v-if="checkoutItems.length === 0">
       <p>No items to checkout.</p>
-      <router-link to="/">Go Back</router-link>
+      <router-link to="/landingPage">Go Back</router-link>
     </div>
 
     <div v-else>

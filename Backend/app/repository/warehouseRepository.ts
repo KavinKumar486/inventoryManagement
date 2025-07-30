@@ -28,9 +28,11 @@ class WarehouseRepository {
             throw new Error(`Error in while fetching: ${error.message}`);
         }
     }
-    async delete(id:number){
-        try{
-            await Warehouse.query().where('id',id).delete();
+    async delete(id: number) {
+        try {
+            const item = await Warehouse.findOrFail(id);
+            item.delete()
+            
             return 'Deleted successfully';
         }
         catch(error){
